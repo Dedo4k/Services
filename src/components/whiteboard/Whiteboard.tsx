@@ -3,31 +3,21 @@ import React from "react";
 import "./Whiteboard.css";
 import Square from "./square/Square";
 import ControlPanel from "./control-panel/ControlPanel";
+import ScrollReducer from "./reducers/ScrollReducer";
+import DragReducer from "./reducers/DragReducer";
 
 type WhiteboardProps = {
     width: number,
     height: number
 }
 
-type WhiteboardState = WhiteboardProps & {
-    dragging: boolean,
-    draggingTarget?: Square,
-    dragPrevX?: number,
-    dragPrevY?: number,
-    scrollPrevX?: number,
-    scrollPrevY?: number
-}
-
-type ScrollDirection = "t" | "tr" | "r" | "br" | "b" | "bl" | "l" | "tl";
+type WhiteboardState = WhiteboardProps & {}
 
 class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
 
     ref: React.RefObject<HTMLDivElement>;
-    scrollIntervalId?: NodeJS.Timeout;
-    scrollInterval = 0.5;
-    scrollStep = 1;
-    scrollEdge = 100;
-    scrollDirection?: ScrollDirection;
+    scrollReducer: ScrollReducer;
+    dragReducer: DragReducer;
 
     constructor(props: any) {
         super(props);
@@ -36,161 +26,29 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
             dragging: false
         }
         this.ref = React.createRef();
+        this.scrollReducer = new ScrollReducer(this);
+        this.dragReducer = new DragReducer(this);
     }
 
     handleDragStart = (event: React.MouseEvent, target: Square) => {
         event.preventDefault();
-        if (!this.state.dragging && target) {
-            this.setState((prev) => ({
-                ...prev,
-                dragging: true,
-                draggingTarget: target,
-                dragPrevX: event.clientX,
-                dragPrevY: event.clientY,
-                scrollPrevX: this.ref.current?.parentElement?.scrollLeft,
-                scrollPrevY: this.ref.current?.parentElement?.scrollTop
-            }));
+        if (!this.dragReducer.dragging && target) {
+            this.dragReducer.dragInit(target, event);
+            this.scrollReducer.scrollInit();
         }
     }
 
     handleDragEnd = (event: React.MouseEvent) => {
-        if (this.state.dragging) {
-            this.state.draggingTarget?.setState((prev) => ({
-                ...prev,
-                dragging: false
-            }), () => this.setState((prev) => ({
-                ...prev,
-                dragging: false,
-                draggingTarget: undefined
-            })));
+        if (this.dragReducer.dragging) {
+            this.dragReducer.dragStop();
+            this.scrollReducer.stopScroll()
         }
-        clearInterval(this.scrollIntervalId);
     }
 
     handleMouseMove = (event: React.MouseEvent) => {
-        if (this.state.dragging && this.state.draggingTarget && this.state.dragPrevX && this.state.dragPrevY) {
-            const {clientX, clientY} = event;
-
-            const offsetX = clientX - this.state.dragPrevX!;
-            const offsetY = clientY - this.state.dragPrevY!;
-            this.dragTo(offsetX, offsetY, () => {
-                this.setState((prev) => ({
-                    ...prev,
-                    dragPrevX: clientX,
-                    dragPrevY: clientY
-                }));
-                const {offsetTop, offsetLeft} = this.ref.current!;
-                const {offsetWidth, offsetHeight} = this.ref.current?.parentElement!;
-
-                const posTop = clientY - offsetTop!;
-                const posLeft = clientX - offsetLeft!;
-
-                if (posTop < this.scrollEdge && posLeft < this.scrollEdge) {
-                    this.scrollTo("tl");
-                } else if (posTop > offsetHeight - this.scrollEdge && posLeft < this.scrollEdge) {
-                    this.scrollTo("bl");
-                } else if (posTop < this.scrollEdge && posLeft > offsetWidth - this.scrollEdge) {
-                    this.scrollTo("tr");
-                } else if (posTop > offsetHeight - this.scrollEdge && posLeft > offsetWidth - this.scrollEdge) {
-                    this.scrollTo("br");
-                } else if (posTop < this.scrollEdge) {
-                    this.scrollTo("t");
-                } else if (posLeft < this.scrollEdge) {
-                    this.scrollTo("l");
-                } else if (posTop > offsetHeight - this.scrollEdge) {
-                    this.scrollTo("b");
-                } else if (posLeft > offsetWidth - this.scrollEdge) {
-                    this.scrollTo("r");
-                } else {
-                    clearInterval(this.scrollIntervalId);
-                    this.scrollDirection = undefined;
-                }
-            });
+        if (this.dragReducer.dragging && this.dragReducer.draggingTarget) {
+            this.dragReducer.handleDrag(event);
         }
-    }
-
-    handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-        if (this.state.dragging && this.state.draggingTarget) {
-            const {scrollTop, scrollLeft} = event.currentTarget;
-
-            const offsetX = scrollLeft - this.state.scrollPrevX!;
-            const offsetY = scrollTop - this.state.scrollPrevY!;
-            this.dragTo(offsetX, offsetY, () => this.setState((prev) => ({
-                ...prev,
-                scrollPrevX: scrollLeft,
-                scrollPrevY: scrollTop
-            })));
-        }
-    }
-
-    dragTo = (offsetX: number, offsetY: number, callback?: () => void) => {
-        if (this.state.dragging && this.state.draggingTarget) {
-            this.state.draggingTarget.setState((prev) => ({
-                ...prev,
-                x: 0 <= prev.x + offsetX ? prev.x + prev.width + offsetX <= this.state.width ? prev.x + offsetX : this.state.width - prev.width! : 0,
-                y: 0 <= prev.y + offsetY ? prev.y + prev.height + offsetY <= this.state.height ? prev.y + offsetY : this.state.height - prev.height! : 0
-            }), callback);
-        }
-    }
-
-    scrollTo = (direction: ScrollDirection) => {
-        if (this.scrollDirection === direction) {
-            return;
-        }
-
-        this.scrollDirection = direction;
-
-        clearInterval(this.scrollIntervalId);
-        switch (direction) {
-            case "t": {
-                this.scroll(0, -this.scrollStep);
-                break;
-            }
-            case "tr": {
-                this.scroll(this.scrollStep, -this.scrollStep);
-                break;
-            }
-            case "r": {
-                this.scroll(this.scrollStep, 0);
-                break;
-            }
-            case "br": {
-                this.scroll(this.scrollStep, this.scrollStep);
-                break;
-            }
-            case "b": {
-                this.scroll(0, this.scrollStep);
-                break;
-            }
-            case "bl": {
-                this.scroll(-this.scrollStep, this.scrollStep);
-                break;
-            }
-            case "l": {
-                this.scroll(-this.scrollStep, 0);
-                break;
-            }
-            case "tl": {
-                this.scroll(-this.scrollStep, -this.scrollStep);
-                break;
-            }
-        }
-    }
-
-    scroll = (x: number, y: number) => {
-        this.scrollIntervalId = setInterval(() => {
-            const {scrollWidth, scrollHeight, scrollTop, scrollLeft} = this.ref.current?.parentElement!;
-            const scrollToTop = scrollTop + y;
-            const scrollToLeft = scrollLeft + x;
-            if (!this.state.dragging) {
-                clearInterval(this.scrollIntervalId);
-            } else {
-                this.ref.current?.parentElement?.scrollTo({
-                    left: 0 <= scrollToLeft ? scrollToLeft <= scrollWidth ? scrollToLeft : 0 : 0,
-                    top: 0 <= scrollToTop ? scrollToTop <= scrollHeight ? scrollToTop : 0 : 0,
-                });
-            }
-        }, this.scrollInterval);
     }
 
     render() {
@@ -200,7 +58,7 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
         }
 
         return (
-            <div className={"whiteboard-container"} onScroll={this.handleScroll}>
+            <div className={"whiteboard-container"} onScroll={this.scrollReducer.handleScroll}>
                 <div ref={this.ref} className={"whiteboard"}
                      onMouseUp={this.handleDragEnd}
                      onMouseMove={this.handleMouseMove}
