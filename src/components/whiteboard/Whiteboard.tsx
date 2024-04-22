@@ -38,10 +38,15 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
         }
     }
 
-    handleDragEnd = (event: React.MouseEvent) => {
+    handleMouseUp = (event: React.MouseEvent) => {
         if (this.dragReducer.dragging) {
-            this.dragReducer.dragStop();
-            this.scrollReducer.stopScroll()
+            this.handleDragEnd();
+        }
+    }
+
+    handleMouseLeave = (event: React.MouseEvent) => {
+        if (this.dragReducer.dragging) {
+            this.handleDragEnd();
         }
     }
 
@@ -49,6 +54,11 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
         if (this.dragReducer.dragging && this.dragReducer.draggingTarget) {
             this.dragReducer.handleDrag(event);
         }
+    }
+
+    handleDragEnd = () => {
+        this.dragReducer.dragStop();
+        this.scrollReducer.stopScroll()
     }
 
     render() {
@@ -60,9 +70,9 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
         return (
             <div className={"whiteboard-container"} onScroll={this.scrollReducer.handleScroll}>
                 <div ref={this.ref} className={"whiteboard"}
-                     onMouseUp={this.handleDragEnd}
+                     onMouseUp={this.handleMouseUp}
                      onMouseMove={this.handleMouseMove}
-                     onMouseLeave={this.handleDragEnd}
+                     onMouseLeave={this.handleMouseLeave}
                      style={styles}>
                     <ControlPanel/>
                     <Square x={100} y={100} width={50} height={50} color={"red"}
