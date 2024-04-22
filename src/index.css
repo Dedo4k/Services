@@ -1,0 +1,11 @@
+@import 'remixicon/fonts/remixicon.css';
+
+:root {
+  --dark-color: #2C4A52;
+  --main-color: #537072;
+  --pale-color: #8E9B97;
+  --light-color: #F4EBDB;
+  --paper-color: #EFEFEF;
+  --neutral-gray-color: #BBC3C6;
+  --onyx-color: #0F1F38;
+}

@@ -1,0 +1,12 @@
+.control-panel {
+    position: sticky;
+    top: 0;
+    left: calc((100vw - 50vw - 15rem) / 2);
+    width: 50vw;
+    background-color: var(--main-color);
+    height: 2.5rem;
+    border-radius: .8rem;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+}
