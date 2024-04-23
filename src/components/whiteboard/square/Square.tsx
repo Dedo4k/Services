@@ -61,9 +61,13 @@ class Square extends React.Component<SquareProps, SquareState> {
         return (
             <div className={"square"} style={styles} onMouseDown={this.onMouseDown}>
                 <Resizer direction={"top"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"top-right"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"right"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"bottom-right"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"bottom"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"bottom-left"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"left"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"top-left"} onMouseDown={this.handleResize}/>
             </div>
         );
     }

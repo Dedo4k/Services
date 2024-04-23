@@ -66,6 +66,15 @@ class ScrollReducer {
         }
     }
 
+    scrollToEdge(clientX: number, clientY: number) {
+        const {offsetTop, offsetLeft} = this.whiteboard.ref.current!;
+
+        const pointerY = clientY - offsetTop!;
+        const pointerX = clientX - offsetLeft!;
+
+        this.scrollWithEdge(pointerX, pointerY);
+    }
+
     private scrollTo = (direction: ScrollDirection) => {
         if (this.scrollDirection === direction) {
             return;

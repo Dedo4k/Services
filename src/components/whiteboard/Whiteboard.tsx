@@ -71,7 +71,7 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
 
     handleDragEnd = () => {
         this.dragReducer.dragStop();
-        this.scrollReducer.scrollStop()
+        this.scrollReducer.scrollStop();
     }
 
     handleResizeStart = (event: React.MouseEvent<HTMLDivElement>, target: Square, resizeDirection: ResizeDirection) => {

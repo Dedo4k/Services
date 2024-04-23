@@ -2,7 +2,15 @@ import React from "react";
 
 import "./Resizer.css";
 
-export type ResizeDirection = "top" | "right" | "bottom" | "left";
+export type ResizeDirection =
+    "top"
+    | "top-right"
+    | "right"
+    | "bottom-right"
+    | "bottom"
+    | "bottom-left"
+    | "left"
+    | "top-left";
 
 type ResizerProps = {
     direction: ResizeDirection,

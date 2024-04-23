@@ -34,15 +34,10 @@ class ResizeReducer {
                         height: prev.height - offsetY
                     }), () => {
                         this.resizePrevY = clientY;
-                        const {offsetTop, offsetLeft} = this.whiteboard.ref.current!;
-
-                        const pointerY = clientY - offsetTop!;
-                        const pointerX = clientX - offsetLeft!;
-
-                        this.whiteboard.scrollReducer.scrollWithEdge(pointerX, pointerY);
+                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                     });
                 }
-                break
+                break;
             }
             case "right": {
                 if (width + offsetX >= minWidth) {
@@ -51,15 +46,10 @@ class ResizeReducer {
                         width: prev.x + prev.width + offsetX <= this.whiteboard.state.width ? prev.width + offsetX : this.whiteboard.state.width - prev.x
                     }), () => {
                         this.resizePrevX = clientX;
-                        const {offsetTop, offsetLeft} = this.whiteboard.ref.current!;
-
-                        const pointerY = clientY - offsetTop!;
-                        const pointerX = clientX - offsetLeft!;
-
-                        this.whiteboard.scrollReducer.scrollWithEdge(pointerX, pointerY);
+                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                     });
                 }
-                break
+                break;
             }
             case "bottom": {
                 if (height + offsetY >= minHeight) {
@@ -68,15 +58,10 @@ class ResizeReducer {
                         height: prev.y + prev.height + offsetY <= this.whiteboard.state.height ? prev.height + offsetY : this.whiteboard.state.height
                     }), () => {
                         this.resizePrevY = clientY;
-                        const {offsetTop, offsetLeft} = this.whiteboard.ref.current!;
-
-                        const pointerY = clientY - offsetTop!;
-                        const pointerX = clientX - offsetLeft!;
-
-                        this.whiteboard.scrollReducer.scrollWithEdge(pointerX, pointerY);
+                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                     });
                 }
-                break
+                break;
             }
             case "left": {
                 if (width - 2 * offsetX >= minWidth) {
@@ -86,12 +71,67 @@ class ResizeReducer {
                         width: prev.width - offsetX
                     }), () => {
                         this.resizePrevX = clientX;
-                        const {offsetTop, offsetLeft} = this.whiteboard.ref.current!;
-
-                        const pointerY = clientY - offsetTop!;
-                        const pointerX = clientX - offsetLeft!;
-
-                        this.whiteboard.scrollReducer.scrollWithEdge(pointerX, pointerY);
+                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                    });
+                }
+                break;
+            }
+            case "top-right": {
+                if (height - 2 * offsetY >= minHeight && width + offsetX >= minWidth) {
+                    this.resizingTarget?.setState((prev) => ({
+                        ...prev,
+                        y: prev.y + offsetY >= 0 ? prev.y + offsetY : 0,
+                        width: prev.x + prev.width + offsetX <= this.whiteboard.state.width ? prev.width + offsetX : this.whiteboard.state.width - prev.x,
+                        height: prev.height - offsetY
+                    }), () => {
+                        this.resizePrevX = clientX;
+                        this.resizePrevY = clientY;
+                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                    });
+                }
+                break;
+            }
+            case "bottom-right": {
+                if (height + offsetY >= minHeight && width + offsetX >= minWidth) {
+                    this.resizingTarget?.setState((prev) => ({
+                        ...prev,
+                        width: prev.x + prev.width + offsetX <= this.whiteboard.state.width ? prev.width + offsetX : this.whiteboard.state.width - prev.x,
+                        height: prev.y + prev.height + offsetY <= this.whiteboard.state.height ? prev.height + offsetY : this.whiteboard.state.height
+                    }), () => {
+                        this.resizePrevX = clientX;
+                        this.resizePrevY = clientY;
+                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                    });
+                }
+                break;
+            }
+            case "bottom-left": {
+                if (height + offsetY >= minHeight && width - 2 * offsetX >= minWidth) {
+                    this.resizingTarget?.setState((prev) => ({
+                        ...prev,
+                        x: prev.x + offsetX > 0 ? prev.x + offsetX : 0,
+                        width: prev.width - offsetX,
+                        height: prev.y + prev.height + offsetY <= this.whiteboard.state.height ? prev.height + offsetY : this.whiteboard.state.height
+                    }), () => {
+                        this.resizePrevX = clientX;
+                        this.resizePrevY = clientY;
+                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                    });
+                }
+                break;
+            }
+            case "top-left": {
+                if (height - 2 * offsetY >= minHeight && width - 2 * offsetX >= minWidth) {
+                    this.resizingTarget?.setState((prev) => ({
+                        ...prev,
+                        x: prev.x + offsetX > 0 ? prev.x + offsetX : 0,
+                        y: prev.y + offsetY >= 0 ? prev.y + offsetY : 0,
+                        width: prev.width - offsetX,
+                        height: prev.height - offsetY
+                    }), () => {
+                        this.resizePrevX = clientX;
+                        this.resizePrevY = clientY;
+                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                     });
                 }
                 break;
