@@ -33,7 +33,7 @@ class DragReducer {
         });
     }
 
-    dragInit(target: Square, event: React.MouseEvent) {
+    dragStart(target: Square, event: React.MouseEvent) {
         this.draggingTarget = target;
         this.dragging = true;
         this.dragPrevX = event.clientX;
