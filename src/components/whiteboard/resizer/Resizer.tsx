@@ -21,7 +21,7 @@ class Resizer extends React.Component<ResizerProps, any> {
 
     render() {
         return (
-            <div className={`${this.props.direction}-resizer`}
+            <div className={`resizer ${this.props.direction}-resizer`}
                  onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => this.props.onMouseDown(event, this.props.direction)}></div>
         );
     }

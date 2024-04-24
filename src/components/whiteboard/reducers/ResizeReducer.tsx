@@ -20,120 +20,92 @@ class ResizeReducer {
     handleResize = (event: React.MouseEvent) => {
         const {clientX, clientY} = event;
 
-        const offsetX = clientX - this.resizePrevX!;
-        const offsetY = clientY - this.resizePrevY!;
+        const y = clientY - this.whiteboard.ref.current?.offsetTop! + this.whiteboard.ref.current?.parentElement?.scrollTop!;
+        const x = clientX - this.whiteboard.ref.current?.offsetLeft! + this.whiteboard.ref.current?.parentElement?.scrollLeft!;
 
-        const {height, width, minHeight, minWidth} = this.resizingTarget?.state!;
+        const {minHeight, minWidth} = this.resizingTarget?.state!;
 
         switch (this.resizeDirection) {
             case "top": {
-                if (height - 2 * offsetY >= minHeight) {
-                    this.resizingTarget?.setState((prev) => ({
-                        ...prev,
-                        y: prev.y + offsetY >= 0 ? prev.y + offsetY : 0,
-                        height: prev.height - offsetY
-                    }), () => {
-                        this.resizePrevY = clientY;
-                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
-                    });
-                }
+                this.resizingTarget?.setState((prev) => ({
+                    ...prev,
+                    y: y > 0 ? prev.y - y + prev.height >= minHeight ? y : prev.y : 0,
+                    height: prev.y - y + prev.height >= minHeight ? prev.y - y + prev.height : prev.height
+                }), () => {
+                    this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                });
                 break;
             }
             case "right": {
-                if (width + offsetX >= minWidth) {
-                    this.resizingTarget?.setState((prev) => ({
-                        ...prev,
-                        width: prev.x + prev.width + offsetX <= this.whiteboard.state.width ? prev.width + offsetX : this.whiteboard.state.width - prev.x
-                    }), () => {
-                        this.resizePrevX = clientX;
-                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
-                    });
-                }
+                this.resizingTarget?.setState((prev) => ({
+                    ...prev,
+                    width: x - prev.x
+                }), () => {
+                    this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                });
                 break;
             }
             case "bottom": {
-                if (height + offsetY >= minHeight) {
-                    this.resizingTarget?.setState((prev) => ({
-                        ...prev,
-                        height: prev.y + prev.height + offsetY <= this.whiteboard.state.height ? prev.height + offsetY : this.whiteboard.state.height
-                    }), () => {
-                        this.resizePrevY = clientY;
-                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
-                    });
-                }
+                this.resizingTarget?.setState((prev) => ({
+                    ...prev,
+                    height: y - prev.y
+                }), () => {
+                    this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                });
                 break;
             }
             case "left": {
-                if (width - 2 * offsetX >= minWidth) {
-                    this.resizingTarget?.setState((prev) => ({
-                        ...prev,
-                        x: prev.x + offsetX > 0 ? prev.x + offsetX : 0,
-                        width: prev.width - offsetX
-                    }), () => {
-                        this.resizePrevX = clientX;
-                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
-                    });
-                }
+                this.resizingTarget?.setState((prev) => ({
+                    ...prev,
+                    x: x > 0 ? prev.x - x + prev.width >= minWidth ? x : prev.x : 0,
+                    width: prev.x - x + prev.width >= minWidth ? prev.x - x + prev.width : prev.width
+                }), () => {
+                    this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                });
                 break;
             }
             case "top-right": {
-                if (height - 2 * offsetY >= minHeight && width + offsetX >= minWidth) {
-                    this.resizingTarget?.setState((prev) => ({
-                        ...prev,
-                        y: prev.y + offsetY >= 0 ? prev.y + offsetY : 0,
-                        width: prev.x + prev.width + offsetX <= this.whiteboard.state.width ? prev.width + offsetX : this.whiteboard.state.width - prev.x,
-                        height: prev.height - offsetY
-                    }), () => {
-                        this.resizePrevX = clientX;
-                        this.resizePrevY = clientY;
-                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
-                    });
-                }
+                this.resizingTarget?.setState((prev) => ({
+                    ...prev,
+                    y: prev.y - y + prev.height >= minHeight ? y : prev.y,
+                    width: x - prev.x,
+                    height: prev.y - y + prev.height >= minHeight ? prev.y - y + prev.height : prev.height
+                }), () => {
+                    this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                });
                 break;
             }
             case "bottom-right": {
-                if (height + offsetY >= minHeight && width + offsetX >= minWidth) {
-                    this.resizingTarget?.setState((prev) => ({
-                        ...prev,
-                        width: prev.x + prev.width + offsetX <= this.whiteboard.state.width ? prev.width + offsetX : this.whiteboard.state.width - prev.x,
-                        height: prev.y + prev.height + offsetY <= this.whiteboard.state.height ? prev.height + offsetY : this.whiteboard.state.height
-                    }), () => {
-                        this.resizePrevX = clientX;
-                        this.resizePrevY = clientY;
-                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
-                    });
-                }
+                this.resizingTarget?.setState((prev) => ({
+                    ...prev,
+                    width: x - prev.x,
+                    height: y - prev.y
+                }), () => {
+                    this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                });
                 break;
             }
             case "bottom-left": {
-                if (height + offsetY >= minHeight && width - 2 * offsetX >= minWidth) {
-                    this.resizingTarget?.setState((prev) => ({
-                        ...prev,
-                        x: prev.x + offsetX > 0 ? prev.x + offsetX : 0,
-                        width: prev.width - offsetX,
-                        height: prev.y + prev.height + offsetY <= this.whiteboard.state.height ? prev.height + offsetY : this.whiteboard.state.height
-                    }), () => {
-                        this.resizePrevX = clientX;
-                        this.resizePrevY = clientY;
-                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
-                    });
-                }
+                this.resizingTarget?.setState((prev) => ({
+                    ...prev,
+                    x: x > 0 ? prev.x - x + prev.width >= minWidth ? x : prev.x : 0,
+                    width: prev.x - x + prev.width >= minWidth ? prev.x - x + prev.width : prev.width,
+                    height: y - prev.y
+                }), () => {
+                    this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                });
                 break;
             }
             case "top-left": {
-                if (height - 2 * offsetY >= minHeight && width - 2 * offsetX >= minWidth) {
-                    this.resizingTarget?.setState((prev) => ({
-                        ...prev,
-                        x: prev.x + offsetX > 0 ? prev.x + offsetX : 0,
-                        y: prev.y + offsetY >= 0 ? prev.y + offsetY : 0,
-                        width: prev.width - offsetX,
-                        height: prev.height - offsetY
-                    }), () => {
-                        this.resizePrevX = clientX;
-                        this.resizePrevY = clientY;
-                        this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
-                    });
-                }
+                this.resizingTarget?.setState((prev) => ({
+                    ...prev,
+                    x: x > 0 ? prev.x - x + prev.width >= minWidth ? x : prev.x : 0,
+                    y: y > 0 ? prev.y - y + prev.height >= minHeight ? y : prev.y : 0,
+                    width: prev.x - x + prev.width >= minWidth ? prev.x - x + prev.width : prev.width,
+                    height: prev.y - y + prev.height >= minHeight ? prev.y - y + prev.height : prev.height
+                }), () => {
+                    this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
+                });
                 break;
             }
         }

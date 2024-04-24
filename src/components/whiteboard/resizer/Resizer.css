@@ -1,6 +1,9 @@
-.top-resizer {
+.resizer {
     position: absolute;
-    top: -2px;
+}
+
+.top-resizer {
+    top: 0;
     left: 5px;
     width: calc(100% - 2 * 5px);
     height: 5px;
@@ -8,17 +11,15 @@
 }
 
 .right-resizer {
-    position: absolute;
     top: 5px;
-    right: -2px;
+    right: 0;
     width: 5px;
     height: calc(100% - 2 * 5px);
     cursor: ew-resize;
 }
 
 .bottom-resizer {
-    position: absolute;
-    bottom: -2px;
+    bottom: 0;
     left: 5px;
     width: calc(100% - 2 * 5px);
     height: 5px;
@@ -26,45 +27,40 @@
 }
 
 .left-resizer {
-    position: absolute;
     top: 5px;
-    left: -2px;
+    left: 0;
     width: 5px;
     height: calc(100% - 2 * 5px);
     cursor: ew-resize;
 }
 
 .top-right-resizer {
-    position: absolute;
-    top: -2px;
-    right: -2px;
+    top: 0;
+    right: 0;
     width: 5px;
     height: 5px;
     cursor: ne-resize;
 }
 
 .bottom-right-resizer {
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
+    bottom: 0;
+    right: 0;
     width: 5px;
     height: 5px;
     cursor: se-resize;
 }
 
 .top-left-resizer {
-    position: absolute;
-    top: -2px;
-    left: -2px;
+    top: 0;
+    left: 0;
     width: 5px;
     height: 5px;
     cursor: nw-resize;
 }
 
 .bottom-left-resizer {
-    position: absolute;
-    bottom: -2px;
-    left: -2px;
+    bottom: 0;
+    left: 0;
     width: 5px;
     height: 5px;
     cursor: sw-resize;
