@@ -137,33 +137,27 @@ class ResizeReducer {
                         ...prev,
                         y: prev.y + offsetY >= 0 ? prev.y + offsetY : 0,
                         height: prev.height - offsetY
-                    }), () => {
-                        callback && callback();
-                    });
+                    }), callback);
                 }
-                break
+                break;
             }
             case "right": {
                 if (width + offsetX >= minWidth) {
                     this.resizingTarget?.setState((prev) => ({
                         ...prev,
                         width: prev.x + prev.width + offsetX <= this.whiteboard.state.width ? prev.width + offsetX : this.whiteboard.state.width - prev.x
-                    }), () => {
-                        callback && callback();
-                    });
+                    }), callback);
                 }
-                break
+                break;
             }
             case "bottom": {
                 if (height + offsetY >= minHeight) {
                     this.resizingTarget?.setState((prev) => ({
                         ...prev,
                         height: prev.y + prev.height + offsetY <= this.whiteboard.state.height ? prev.height + offsetY : this.whiteboard.state.height
-                    }), () => {
-                        callback && callback();
-                    });
+                    }), callback);
                 }
-                break
+                break;
             }
             case "left": {
                 if (width - 2 * offsetX >= minWidth) {
@@ -171,9 +165,51 @@ class ResizeReducer {
                         ...prev,
                         x: prev.x + offsetX > 0 ? prev.x + offsetX : 0,
                         width: prev.width - offsetX
-                    }), () => {
-                        callback && callback();
-                    });
+                    }), callback);
+                }
+                break;
+            }
+            case "top-right": {
+                if (height - 2 * offsetY >= minHeight && width + offsetX >= minWidth) {
+                    this.resizingTarget?.setState((prev) => ({
+                        ...prev,
+                        y: prev.y + offsetY >= 0 ? prev.y + offsetY : 0,
+                        width: prev.x + prev.width + offsetX <= this.whiteboard.state.width ? prev.width + offsetX : this.whiteboard.state.width - prev.x,
+                        height: prev.height - offsetY
+                    }), callback);
+                }
+                break;
+            }
+            case "bottom-right": {
+                if (height + offsetY >= minHeight && width + offsetX >= minWidth) {
+                    this.resizingTarget?.setState((prev) => ({
+                        ...prev,
+                        width: prev.x + prev.width + offsetX <= this.whiteboard.state.width ? prev.width + offsetX : this.whiteboard.state.width - prev.x,
+                        height: prev.y + prev.height + offsetY <= this.whiteboard.state.height ? prev.height + offsetY : this.whiteboard.state.height
+                    }), callback);
+                }
+                break;
+            }
+            case "bottom-left": {
+                if (height + offsetY >= minHeight && width - 2 * offsetX >= minWidth) {
+                    this.resizingTarget?.setState((prev) => ({
+                        ...prev,
+                        x: prev.x + offsetX > 0 ? prev.x + offsetX : 0,
+                        width: prev.width - offsetX,
+                        height: prev.y + prev.height + offsetY <= this.whiteboard.state.height ? prev.height + offsetY : this.whiteboard.state.height
+                    }), callback);
+                }
+                break;
+            }
+            case "top-left": {
+                if (height - 2 * offsetY >= minHeight && width - 2 * offsetX >= minWidth) {
+                    this.resizingTarget?.setState((prev) => ({
+                        ...prev,
+                        x: prev.x + offsetX > 0 ? prev.x + offsetX : 0,
+                        y: prev.y + offsetY >= 0 ? prev.y + offsetY : 0,
+                        width: prev.width - offsetX,
+                        height: prev.height - offsetY
+                    }), callback);
                 }
                 break;
             }
