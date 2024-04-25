@@ -19,21 +19,25 @@ class ScrollReducer {
     }
 
     handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-        if (this.whiteboard.dragReducer.dragging && this.whiteboard.dragReducer.draggingTarget) {
-            const {scrollTop, scrollLeft} = event.currentTarget;
+        const {scrollTop, scrollLeft} = event.currentTarget;
 
-            const offsetX = scrollLeft - this.scrollPrevX!;
-            const offsetY = scrollTop - this.scrollPrevY!;
-            this.whiteboard.dragReducer.dragTo(offsetX, offsetY, () => this.scrollInit(scrollLeft, scrollTop));
+        const offsetX = scrollLeft - this.scrollPrevX!;
+        const offsetY = scrollTop - this.scrollPrevY!;
+
+        if (this.whiteboard.dragReducer.dragging && this.whiteboard.dragReducer.draggingTarget) {
+            this.whiteboard.dragReducer.dragTo(offsetX, offsetY, () => this.scrollStart(scrollLeft, scrollTop));
+        }
+        if (this.whiteboard.resizeReducer.resizing && this.whiteboard.resizeReducer.resizingTarget) {
+            this.whiteboard.resizeReducer.resizeTo(offsetX, offsetY, () => this.scrollStart(scrollLeft, scrollTop));
         }
     }
 
-    scrollInit(x?: number, y?: number) {
+    scrollStart(x?: number, y?: number) {
         this.scrollPrevX = x || this.whiteboard.ref.current?.parentElement?.scrollLeft;
         this.scrollPrevY = y || this.whiteboard.ref.current?.parentElement?.scrollTop;
     }
 
-    stopScroll() {
+    scrollStop() {
         clearInterval(this.scrollIntervalId);
         this.scrollDirection = undefined;
     }
@@ -58,8 +62,17 @@ class ScrollReducer {
         } else if (x > offsetWidth - this.scrollEdge) {
             this.scrollTo("r");
         } else {
-            this.stopScroll();
+            this.scrollStop();
         }
+    }
+
+    scrollToEdge(clientX: number, clientY: number) {
+        const {offsetTop, offsetLeft} = this.whiteboard.ref.current!;
+
+        const pointerY = clientY - offsetTop!;
+        const pointerX = clientX - offsetLeft!;
+
+        this.scrollWithEdge(pointerX, pointerY);
     }
 
     private scrollTo = (direction: ScrollDirection) => {
@@ -67,7 +80,7 @@ class ScrollReducer {
             return;
         }
 
-        this.stopScroll();
+        this.scrollStop();
 
         this.scrollDirection = direction;
         switch (direction) {
@@ -111,13 +124,13 @@ class ScrollReducer {
             const {scrollWidth, scrollHeight, scrollTop, scrollLeft} = this.whiteboard.ref.current?.parentElement!;
             const scrollToTop = scrollTop + offsetY;
             const scrollToLeft = scrollLeft + offsetX;
-            if (!this.whiteboard.dragReducer.dragging) {
-                this.stopScroll();
-            } else {
+            if (this.whiteboard.dragReducer.dragging || this.whiteboard.resizeReducer.resizing) {
                 this.whiteboard.ref.current?.parentElement?.scrollTo({
                     left: 0 <= scrollToLeft ? scrollToLeft <= scrollWidth ? scrollToLeft : 0 : 0,
                     top: 0 <= scrollToTop ? scrollToTop <= scrollHeight ? scrollToTop : 0 : 0,
                 });
+            } else {
+                this.scrollStop();
             }
         }, this.scrollInterval);
     }

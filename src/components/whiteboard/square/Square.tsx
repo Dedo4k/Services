@@ -1,14 +1,18 @@
 import React from "react";
 
 import "./Square.css";
+import Resizer, {ResizeDirection} from "../resizer/Resizer";
 
 type SquareProps = {
     x: number,
     y: number,
     width: number,
     height: number,
+    minWidth: number,
+    minHeight: number,
     color: string,
-    onMouseDown: (event: React.MouseEvent, target: Square) => void
+    onDragStart: (event: React.MouseEvent, target: Square) => void,
+    onResizeStart: (event: React.MouseEvent<HTMLDivElement>, target: Square, resizeDirection: ResizeDirection) => void
 }
 
 type SquareState = SquareProps & {
@@ -32,14 +36,22 @@ class Square extends React.Component<SquareProps, SquareState> {
             this.setState((prev) => ({
                 ...prev,
                 dragging: true
-            }), () => this.props.onMouseDown(event, this))
+            }), () => this.props.onDragStart(event, this))
         }
     };
+
+    handleResize = (event: React.MouseEvent<HTMLDivElement>, resizeDirection: ResizeDirection) => {
+        event.stopPropagation();
+        event.preventDefault();
+        this.props.onResizeStart && this.props.onResizeStart(event, this, resizeDirection);
+    }
 
     render() {
         const styles = {
             width: `${this.state.width}px`,
             height: `${this.state.height}px`,
+            minWidth: `${this.state.minWidth}px`,
+            minHeight: `${this.state.minHeight}px`,
             top: `${this.state.y}px`,
             left: `${this.state.x}px`,
             backgroundColor: this.state.color,
@@ -47,7 +59,16 @@ class Square extends React.Component<SquareProps, SquareState> {
         }
 
         return (
-            <div className={"square"} style={styles} onMouseDown={this.onMouseDown}></div>
+            <div className={"square"} style={styles} onMouseDown={this.onMouseDown}>
+                <Resizer direction={"top"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"top-right"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"right"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"bottom-right"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"bottom"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"bottom-left"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"left"} onMouseDown={this.handleResize}/>
+                <Resizer direction={"top-left"} onMouseDown={this.handleResize}/>
+            </div>
         );
     }
 }

@@ -1,0 +1,67 @@
+.resizer {
+    position: absolute;
+}
+
+.top-resizer {
+    top: 0;
+    left: 5px;
+    width: calc(100% - 2 * 5px);
+    height: 5px;
+    cursor: ns-resize;
+}
+
+.right-resizer {
+    top: 5px;
+    right: 0;
+    width: 5px;
+    height: calc(100% - 2 * 5px);
+    cursor: ew-resize;
+}
+
+.bottom-resizer {
+    bottom: 0;
+    left: 5px;
+    width: calc(100% - 2 * 5px);
+    height: 5px;
+    cursor: ns-resize;
+}
+
+.left-resizer {
+    top: 5px;
+    left: 0;
+    width: 5px;
+    height: calc(100% - 2 * 5px);
+    cursor: ew-resize;
+}
+
+.top-right-resizer {
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 5px;
+    cursor: ne-resize;
+}
+
+.bottom-right-resizer {
+    bottom: 0;
+    right: 0;
+    width: 5px;
+    height: 5px;
+    cursor: se-resize;
+}
+
+.top-left-resizer {
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    cursor: nw-resize;
+}
+
+.bottom-left-resizer {
+    bottom: 0;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    cursor: sw-resize;
+}
