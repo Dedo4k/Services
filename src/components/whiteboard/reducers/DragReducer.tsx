@@ -1,12 +1,12 @@
 import Whiteboard from "../Whiteboard";
-import Square from "../square/Square";
+import WhiteboardElement from "../square/WhiteboardElement";
 import React from "react";
 
 class DragReducer {
 
     whiteboard: Whiteboard;
     dragging: boolean;
-    draggingTarget?: Square;
+    draggingTarget?: WhiteboardElement;
     dragPrevX?: number;
     dragPrevY?: number;
 
@@ -33,7 +33,7 @@ class DragReducer {
         });
     }
 
-    dragStart(target: Square, event: React.MouseEvent) {
+    dragStart(target: WhiteboardElement, event: React.MouseEvent) {
         this.draggingTarget = target;
         this.dragging = true;
         this.dragPrevX = event.clientX;

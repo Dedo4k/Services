@@ -1,8 +1,7 @@
 import React from "react";
 
 import "./Whiteboard.css";
-import Square from "./square/Square";
-import ControlPanel from "./control-panel/ControlPanel";
+import WhiteboardElement from "./square/WhiteboardElement";
 import ScrollReducer from "./reducers/ScrollReducer";
 import DragReducer from "./reducers/DragReducer";
 import ResizeReducer from "./reducers/ResizeReducer";
@@ -10,7 +9,8 @@ import {ResizeDirection} from "./resizer/Resizer";
 
 type WhiteboardProps = {
     width: number,
-    height: number
+    height: number,
+    children?: React.ReactNode
 }
 
 type WhiteboardState = WhiteboardProps & {}
@@ -61,7 +61,7 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
         }
     }
 
-    handleDragStart = (event: React.MouseEvent, target: Square) => {
+    handleDragStart = (event: React.MouseEvent, target: WhiteboardElement) => {
         event.preventDefault();
         if (!this.dragReducer.dragging && target) {
             this.dragReducer.dragStart(target, event);
@@ -74,7 +74,7 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
         this.scrollReducer.scrollStop();
     }
 
-    handleResizeStart = (event: React.MouseEvent<HTMLDivElement>, target: Square, resizeDirection: ResizeDirection) => {
+    handleResizeStart = (event: React.MouseEvent<HTMLDivElement>, target: WhiteboardElement, resizeDirection: ResizeDirection) => {
         if (!this.resizeReducer.resizing && target) {
             this.resizeReducer.resizeStart(event, target, resizeDirection);
             this.scrollReducer.scrollStart();
@@ -94,13 +94,14 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
                      onMouseMove={this.handleMouseMove}
                      onMouseLeave={this.handleMouseLeave}
                      style={styles}>
-                    <ControlPanel/>
-                    <Square x={100} y={100} width={100} height={50} minWidth={100} minHeight={50} color={"red"}
-                            onDragStart={this.handleDragStart}
-                            onResizeStart={this.handleResizeStart}/>
-                    <Square x={200} y={200} width={50} height={100} minWidth={50} minHeight={100} color={"green"}
-                            onDragStart={this.handleDragStart}
-                            onResizeStart={this.handleResizeStart}/>
+                    {React.Children.map(this.props.children, (child) => (
+                        <WhiteboardElement x={100} y={100} width={100} height={50} minWidth={100} minHeight={50}
+                                           color={"red"}
+                                           onDragStart={this.handleDragStart}
+                                           onResizeStart={this.handleResizeStart}>
+                            {child}
+                        </WhiteboardElement>
+                    ))}
                 </div>
             </div>
         );

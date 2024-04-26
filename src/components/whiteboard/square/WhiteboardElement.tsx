@@ -1,9 +1,9 @@
 import React from "react";
 
-import "./Square.css";
+import "./WhiteboardElement.css";
 import Resizer, {ResizeDirection} from "../resizer/Resizer";
 
-type SquareProps = {
+type WhiteboardElementProps = {
     x: number,
     y: number,
     width: number,
@@ -11,18 +11,19 @@ type SquareProps = {
     minWidth: number,
     minHeight: number,
     color: string,
-    onDragStart: (event: React.MouseEvent, target: Square) => void,
-    onResizeStart: (event: React.MouseEvent<HTMLDivElement>, target: Square, resizeDirection: ResizeDirection) => void
+    children?: React.ReactNode,
+    onDragStart: (event: React.MouseEvent, target: WhiteboardElement) => void,
+    onResizeStart: (event: React.MouseEvent<HTMLDivElement>, target: WhiteboardElement, resizeDirection: ResizeDirection) => void
 }
 
-type SquareState = SquareProps & {
+type WhiteboardElementState = WhiteboardElementProps & {
     dragging: boolean,
     resizing: boolean
 }
 
-class Square extends React.Component<SquareProps, SquareState> {
+class WhiteboardElement extends React.Component<WhiteboardElementProps, WhiteboardElementState> {
 
-    constructor(props: SquareProps) {
+    constructor(props: WhiteboardElementProps) {
         super(props);
         this.state = {
             ...props,
@@ -68,9 +69,10 @@ class Square extends React.Component<SquareProps, SquareState> {
                 <Resizer direction={"bottom-left"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"left"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"top-left"} onMouseDown={this.handleResize}/>
+                {this.props.children}
             </div>
         );
     }
 }
 
-export default Square;
+export default WhiteboardElement;

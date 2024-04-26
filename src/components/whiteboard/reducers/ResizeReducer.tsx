@@ -1,5 +1,5 @@
 import Whiteboard from "../Whiteboard";
-import Square from "../square/Square";
+import WhiteboardElement from "../square/WhiteboardElement";
 import React from "react";
 import {ResizeDirection} from "../resizer/Resizer";
 
@@ -7,7 +7,7 @@ class ResizeReducer {
 
     whiteboard: Whiteboard;
     resizing: boolean;
-    resizingTarget?: Square;
+    resizingTarget?: WhiteboardElement;
     resizeDirection?: ResizeDirection;
     resizePrevX?: number;
     resizePrevY?: number;
@@ -111,7 +111,7 @@ class ResizeReducer {
         }
     }
 
-    resizeStart(event: React.MouseEvent<HTMLDivElement>, target: Square, direction: ResizeDirection) {
+    resizeStart(event: React.MouseEvent<HTMLDivElement>, target: WhiteboardElement, direction: ResizeDirection) {
         const {clientX, clientY} = event;
 
         this.resizingTarget = target;
