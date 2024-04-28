@@ -1,5 +1,5 @@
 import React from "react";
-import IconButton from "../../../icon-button/IconButton";
+import IconButton from "../../../common/icon-button/IconButton";
 
 class DashboardElementControls extends React.Component<any, any> {
 

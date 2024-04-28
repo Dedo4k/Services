@@ -1,8 +1,8 @@
 import React, {Fragment} from "react";
 import DashboardElement from "./dashboard-elements/dashboard-element/DashboardElement";
-import {Button, Whiteboard} from "../index";
-import DashboardClock from "./dashboard-elements/dashboard-clock-element/DashboardClock";
+import {Whiteboard} from "../index";
 import ControlPanel from "./control-panel/ControlPanel";
+import NewDashboardElement from "./new-dashboard-element/NewDashboardElement";
 
 type DashboardState = {
     services: DashboardElement[]
@@ -13,18 +13,19 @@ class Dashboard extends React.Component<any, DashboardState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            services: [new DashboardElement(this)]
+            services: []
         }
     }
 
-    addService(service: DashboardElement) {
+    addService = (service: DashboardElement) => {
+        service.dashboard = this;
         this.setState((prev) => ({
             ...prev,
             services: prev.services.concat(service)
         }));
     }
 
-    removeService(service: DashboardElement) {
+    removeService = (service: DashboardElement) => {
         this.setState((prev) => ({
             ...prev,
             services: prev.services.filter((ell) => ell !== service)
@@ -35,8 +36,7 @@ class Dashboard extends React.Component<any, DashboardState> {
         return (
             <div className={"dashboard"}>
                 <ControlPanel>
-                    <Button className={"control-panel-btn"} size={"small"} variant={"contained"}
-                            onClick={() => this.addService(new DashboardClock(this))}>Add</Button>
+                    <NewDashboardElement onServiceAdd={this.addService}/>
                 </ControlPanel>
                 <Whiteboard width={10000} height={10000}>
                     {this.state.services.map((service) =>

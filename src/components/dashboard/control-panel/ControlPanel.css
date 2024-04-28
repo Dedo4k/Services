@@ -4,16 +4,21 @@
     left: calc(100% - 15rem - 50%);
     width: calc(100% - 15rem - 50%);
     background-color: var(--main-color);
-    height: 2.5rem;
+    height: 3rem;
     border-radius: .25rem;
     z-index: 100;
     display: flex;
     align-items: center;
-    padding-inline: 1rem;
+    padding: 1rem;
+    gap: 1rem;
 }
 
 .control-panel .control-panel-btn {
     background-color: var(--pale-color);
+}
+
+.control-panel .control-panel-btn i {
+    font-size: .8rem;
 }
 
 .control-panel .control-panel-btn:hover {

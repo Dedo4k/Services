@@ -6,19 +6,22 @@ import {v4} from "uuid";
 class DashboardElement {
 
     id: string;
-    dashboard: Dashboard;
+    dashboard?: Dashboard;
     minWidth: number;
     minHeight: number;
 
-    constructor(dashboard: Dashboard) {
-        this.dashboard = dashboard;
+    constructor() {
         this.id = v4();
         this.minWidth = 300;
         this.minHeight = 150;
     }
 
+    isValid = () => {
+        return true;
+    }
+
     delete = () => {
-        this.dashboard.removeService(this);
+        this.dashboard?.removeService(this);
     }
 
     buildComponent(): React.ReactNode {

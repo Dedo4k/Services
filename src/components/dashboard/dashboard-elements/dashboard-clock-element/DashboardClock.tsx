@@ -1,23 +1,27 @@
 import DashboardElement from "../dashboard-element/DashboardElement";
 import React from "react";
 import DashboardClockComponent, {DashboardClockProps} from "./DashboardClockComponent";
-import Dashboard from "../../Dashboard";
 
 class DashboardClock extends DashboardElement {
 
-    // @ts-ignore
-    _timeZones = Intl.supportedValuesOf("timeZone");
-    timeZone: string;
+    _timeZone?: string;
 
-    constructor(dashboard: Dashboard) {
-        super(dashboard);
-        this.timeZone = "Europe/Minsk";
+    constructor() {
+        super();
+    }
+
+    timeZone = (timeZone: string) => {
+        this._timeZone = timeZone;
+    }
+
+    isValid = () => {
+        return !!this._timeZone;
     }
 
     buildComponent(): React.ReactNode {
         return React.createElement(DashboardClockComponent, {
             color: "#EFEFEF",
-            timeZone: this.timeZone,
+            timeZone: this?._timeZone,
             minWidth: this.minWidth,
             minHeight: this.minHeight,
             onDelete: this.delete
