@@ -117,7 +117,7 @@ class NewDashboardElement extends React.Component<NewDashboardElementProps, NewD
                 <Dialog maxWidth={"md"} fullWidth open={this.state.serviceConfigureDialog}
                         onClose={this.toggleServiceConfigureDialog}>
                     <DialogTitle className={"new-dashboard-element-dialog-title"}>Service Configuration</DialogTitle>
-                    <DialogContent>
+                    <DialogContent className={"new-dashboard-element-dialog-content"}>
                         {
                             this.state.selectedDefinition?.props.map((prop, index) => {
                                 //@ts-ignore

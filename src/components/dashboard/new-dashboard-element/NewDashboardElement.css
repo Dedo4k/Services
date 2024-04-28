@@ -12,10 +12,6 @@
     margin-bottom: 0;
 }
 
-.new-dashboard-element-dialog-btn.MuiButton-root {
-    margin-left: auto;
-}
-
 .new-dashboard-element-dialog-btn.MuiButton-contained {
     background-color: var(--onyx-color);
 }
@@ -34,4 +30,8 @@
     background-color: var(--onyx-color);
     border-color: var(--onyx-color);
     color: var(--paper-color);
+}
+
+.new-dashboard-element-dialog-content.MuiDialogContent-root {
+    padding: 1rem !important;
 }

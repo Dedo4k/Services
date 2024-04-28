@@ -14,7 +14,7 @@ class AutocompletePropDefinition extends DashboardElementPropDefinition {
     props(handler: any): {} {
         return {
             options: this.options,
-            renderInput: params => <TextField {...params}/>,
+            renderInput: params => <TextField {...params} label={this.label}/>,
             onChange: (event, value) => handler(value.label)
         } as AutocompleteProps<any, any, any, any>;
     }
