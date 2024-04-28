@@ -11,7 +11,6 @@ type WhiteboardElementProps = {
     minWidth: number,
     minHeight: number,
     scale: number,
-    color: string,
     children?: React.ReactNode,
     onDragStart: (event: React.MouseEvent, target: WhiteboardElement) => void,
     onResizeStart: (event: React.MouseEvent<HTMLDivElement>, target: WhiteboardElement, resizeDirection: ResizeDirection) => void
@@ -27,8 +26,7 @@ class WhiteboardElement extends React.Component<WhiteboardElementProps, Whiteboa
         super(props);
         this.state = {
             ...props,
-            dragging: false,
-            scale: 1
+            dragging: false
         }
     }
 
@@ -55,7 +53,6 @@ class WhiteboardElement extends React.Component<WhiteboardElementProps, Whiteboa
             minHeight: `${this.state.minHeight}px`,
             top: `${this.state.y * this.props.scale}px`,
             left: `${this.state.x * this.props.scale}px`,
-            backgroundColor: this.state.color,
             cursor: this.state.dragging ? "move" : "grab"
         }
 
@@ -73,7 +70,11 @@ class WhiteboardElement extends React.Component<WhiteboardElementProps, Whiteboa
                     {
                         React.Children.map(this.props.children, (child: any) => {
                             const element = child.props.children;
-                            return React.cloneElement(element, {...element.props, ...this.state})
+                            return React.cloneElement(element, {
+                                ...element.props,
+                                ...this.state,
+                                scale: this.props.scale
+                            })
                         })
                     }
                 </div>

@@ -120,7 +120,6 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
                                                    minWidth={ch.props.minWidth}
                                                    minHeight={ch.props.minHeight}
                                                    scale={this.state.scale}
-                                                   color={"red"}
                                                    onDragStart={this.handleDragStart}
                                                    onResizeStart={this.handleResizeStart}>
                                     {child}

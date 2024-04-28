@@ -7,14 +7,14 @@
     top: 0;
     left: 5px;
     width: calc(100% - 2 * 5px);
-    height: 5px;
+    height: 1px;
     cursor: ns-resize;
 }
 
 .right-resizer {
     top: 5px;
     right: 0;
-    width: 5px;
+    width: 1px;
     height: calc(100% - 2 * 5px);
     cursor: ew-resize;
 }
@@ -23,14 +23,14 @@
     bottom: 0;
     left: 5px;
     width: calc(100% - 2 * 5px);
-    height: 5px;
+    height: 1px;
     cursor: ns-resize;
 }
 
 .left-resizer {
     top: 5px;
     left: 0;
-    width: 5px;
+    width: 1px;
     height: calc(100% - 2 * 5px);
     cursor: ew-resize;
 }

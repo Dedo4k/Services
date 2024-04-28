@@ -23,7 +23,7 @@ class DashboardElement {
 
     buildComponent(): React.ReactNode {
         return React.createElement(DashboardElementComponent, {
-            id: this.id,
+            color: "#EFEFEF",
             minWidth: this.minWidth,
             minHeight: this.minHeight,
             onDelete: this.delete

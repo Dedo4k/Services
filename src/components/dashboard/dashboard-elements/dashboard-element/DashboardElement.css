@@ -1,6 +1,7 @@
 .dashboard-element {
     width: 100%;
     height: 100%;
+    border: 1px solid var(--onyx-color);
 }
 
 .dashboard-element .dashboard-element-controls {
@@ -19,4 +20,19 @@
 .dashboard-element .dashboard-element-content {
     overflow: auto;
     height: 100%;
+}
+
+.dashboard-element .dashboard-element-content::-webkit-scrollbar {
+    overflow: auto;
+    width: .2rem;
+    height: .2rem;
+}
+
+.dashboard-element .dashboard-element-content::-webkit-scrollbar-corner {
+    background-color: var(--onyx-color);
+}
+
+.dashboard-element .dashboard-element-content::-webkit-scrollbar-thumb {
+    background-color: var(--onyx-color);
+    border-radius: 1rem;
 }
