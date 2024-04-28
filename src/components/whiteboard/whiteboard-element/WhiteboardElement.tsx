@@ -10,6 +10,7 @@ type WhiteboardElementProps = {
     height: number,
     minWidth: number,
     minHeight: number,
+    scale: number,
     color: string,
     children?: React.ReactNode,
     onDragStart: (event: React.MouseEvent, target: WhiteboardElement) => void,
@@ -17,8 +18,7 @@ type WhiteboardElementProps = {
 }
 
 type WhiteboardElementState = WhiteboardElementProps & {
-    dragging: boolean,
-    resizing: boolean
+    dragging: boolean
 }
 
 class WhiteboardElement extends React.Component<WhiteboardElementProps, WhiteboardElementState> {
@@ -28,7 +28,7 @@ class WhiteboardElement extends React.Component<WhiteboardElementProps, Whiteboa
         this.state = {
             ...props,
             dragging: false,
-            resizing: false
+            scale: 1
         }
     }
 
@@ -49,12 +49,12 @@ class WhiteboardElement extends React.Component<WhiteboardElementProps, Whiteboa
 
     render() {
         const styles = {
-            width: `${this.state.width}px`,
-            height: `${this.state.height}px`,
+            width: `${this.state.width * this.props.scale}px`,
+            height: `${this.state.height * this.props.scale}px`,
             minWidth: `${this.state.minWidth}px`,
             minHeight: `${this.state.minHeight}px`,
-            top: `${this.state.y}px`,
-            left: `${this.state.x}px`,
+            top: `${this.state.y * this.props.scale}px`,
+            left: `${this.state.x * this.props.scale}px`,
             backgroundColor: this.state.color,
             cursor: this.state.dragging ? "move" : "grab"
         }

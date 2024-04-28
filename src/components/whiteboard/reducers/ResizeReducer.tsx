@@ -1,5 +1,5 @@
 import Whiteboard from "../Whiteboard";
-import WhiteboardElement from "../square/WhiteboardElement";
+import WhiteboardElement from "../whiteboard-element/WhiteboardElement";
 import React from "react";
 import {ResizeDirection} from "../resizer/Resizer";
 
@@ -19,11 +19,13 @@ class ResizeReducer {
 
     handleResize = (event: React.MouseEvent) => {
         const {clientX, clientY} = event;
-
-        const y = clientY - this.whiteboard.ref.current?.offsetTop! + this.whiteboard.ref.current?.parentElement?.scrollTop!;
-        const x = clientX - this.whiteboard.ref.current?.offsetLeft! + this.whiteboard.ref.current?.parentElement?.scrollLeft!;
-
+        const {scale} = this.whiteboard.state;
         const {minHeight, minWidth} = this.resizingTarget?.state!;
+        const {offsetTop, offsetLeft} = this.whiteboard.whiteboardRef.current!;
+        const {scrollTop, scrollLeft} = this.whiteboard.whiteboardContainerRef.current!;
+
+        const y = (clientY - offsetTop + scrollTop) / scale;
+        const x = (clientX - offsetLeft + scrollLeft) / scale;
 
         switch (this.resizeDirection) {
             case "top": {

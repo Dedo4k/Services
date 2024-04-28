@@ -20,21 +20,22 @@ class ScrollReducer {
 
     handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const {scrollTop, scrollLeft} = event.currentTarget;
+        const {dragReducer, resizeReducer, state: {scale}} = this.whiteboard;
 
-        const offsetX = scrollLeft - this.scrollPrevX!;
-        const offsetY = scrollTop - this.scrollPrevY!;
+        const offsetX = (scrollLeft - this.scrollPrevX!) / scale;
+        const offsetY = (scrollTop - this.scrollPrevY!) / scale;
 
-        if (this.whiteboard.dragReducer.dragging && this.whiteboard.dragReducer.draggingTarget) {
-            this.whiteboard.dragReducer.dragTo(offsetX, offsetY, () => this.scrollStart(scrollLeft, scrollTop));
+        if (dragReducer.dragging && dragReducer.draggingTarget) {
+            dragReducer.dragTo(offsetX, offsetY, () => this.scrollStart(scrollLeft, scrollTop));
         }
-        if (this.whiteboard.resizeReducer.resizing && this.whiteboard.resizeReducer.resizingTarget) {
-            this.whiteboard.resizeReducer.resizeTo(offsetX, offsetY, () => this.scrollStart(scrollLeft, scrollTop));
+        if (resizeReducer.resizing && resizeReducer.resizingTarget) {
+            resizeReducer.resizeTo(offsetX, offsetY, () => this.scrollStart(scrollLeft, scrollTop));
         }
     }
 
     scrollStart(x?: number, y?: number) {
-        this.scrollPrevX = x || this.whiteboard.ref.current?.parentElement?.scrollLeft;
-        this.scrollPrevY = y || this.whiteboard.ref.current?.parentElement?.scrollTop;
+        this.scrollPrevX = x || this.whiteboard.whiteboardContainerRef.current?.scrollLeft;
+        this.scrollPrevY = y || this.whiteboard.whiteboardContainerRef.current?.scrollTop;
     }
 
     scrollStop() {
@@ -43,7 +44,7 @@ class ScrollReducer {
     }
 
     scrollWithEdge(x: number, y: number) {
-        const {offsetWidth, offsetHeight} = this.whiteboard.ref.current?.parentElement!;
+        const {offsetWidth, offsetHeight} = this.whiteboard.whiteboardContainerRef.current!;
 
         if (y < this.scrollEdge && x < this.scrollEdge) {
             this.scrollTo("tl");
@@ -67,7 +68,7 @@ class ScrollReducer {
     }
 
     scrollToEdge(clientX: number, clientY: number) {
-        const {offsetTop, offsetLeft} = this.whiteboard.ref.current!;
+        const {offsetTop, offsetLeft} = this.whiteboard.whiteboardRef.current!;
 
         const pointerY = clientY - offsetTop!;
         const pointerX = clientX - offsetLeft!;
@@ -121,11 +122,17 @@ class ScrollReducer {
 
     private scroll = (offsetX: number, offsetY: number) => {
         this.scrollIntervalId = setInterval(() => {
-            const {scrollWidth, scrollHeight, scrollTop, scrollLeft} = this.whiteboard.ref.current?.parentElement!;
+            const {
+                scrollWidth,
+                scrollHeight,
+                scrollTop,
+                scrollLeft
+            } = this.whiteboard.whiteboardContainerRef.current!;
+            const {dragReducer, resizeReducer} = this.whiteboard;
             const scrollToTop = scrollTop + offsetY;
             const scrollToLeft = scrollLeft + offsetX;
-            if (this.whiteboard.dragReducer.dragging || this.whiteboard.resizeReducer.resizing) {
-                this.whiteboard.ref.current?.parentElement?.scrollTo({
+            if (dragReducer.dragging || resizeReducer.resizing) {
+                this.whiteboard.whiteboardContainerRef.current?.scrollTo({
                     left: 0 <= scrollToLeft ? scrollToLeft <= scrollWidth ? scrollToLeft : 0 : 0,
                     top: 0 <= scrollToTop ? scrollToTop <= scrollHeight ? scrollToTop : 0 : 0,
                 });

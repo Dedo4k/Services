@@ -1,11 +1,12 @@
 import React from "react";
 
 import "./Whiteboard.css";
-import WhiteboardElement from "./square/WhiteboardElement";
+import WhiteboardElement from "./whiteboard-element/WhiteboardElement";
 import ScrollReducer from "./reducers/ScrollReducer";
 import DragReducer from "./reducers/DragReducer";
 import ResizeReducer from "./reducers/ResizeReducer";
 import {ResizeDirection} from "./resizer/Resizer";
+import ScaleReducer from "./reducers/ScaleReducer";
 
 type WhiteboardProps = {
     width: number,
@@ -13,25 +14,39 @@ type WhiteboardProps = {
     children?: React.ReactNode
 }
 
-type WhiteboardState = WhiteboardProps & {}
+type WhiteboardState = WhiteboardProps & {
+    scale: number
+}
 
 class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
 
-    ref: React.RefObject<HTMLDivElement>;
+    whiteboardContainerRef: React.RefObject<HTMLDivElement>;
+    whiteboardRef: React.RefObject<HTMLDivElement>;
     scrollReducer: ScrollReducer;
     dragReducer: DragReducer;
     resizeReducer: ResizeReducer;
+    scaleReducer: ScaleReducer;
 
-    constructor(props: any) {
+    constructor(props: WhiteboardProps) {
         super(props);
         this.state = {
             ...props,
-            dragging: false
+            scale: 1
         }
-        this.ref = React.createRef();
+        this.whiteboardRef = React.createRef();
+        this.whiteboardContainerRef = React.createRef();
         this.scrollReducer = new ScrollReducer(this);
         this.dragReducer = new DragReducer(this);
         this.resizeReducer = new ResizeReducer(this);
+        this.scaleReducer = new ScaleReducer(this);
+    }
+
+    componentDidMount() {
+        this.whiteboardRef.current?.addEventListener("wheel", this.scaleReducer.handleWheel, {passive: false});
+    }
+
+    componentWillUnmount() {
+        this.whiteboardRef.current?.removeEventListener("wheel", this.scaleReducer.handleWheel);
     }
 
     handleMouseUp = (event: React.MouseEvent) => {
@@ -88,14 +103,17 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
         }
 
         return (
-            <div className={"whiteboard-container"} onScroll={this.scrollReducer.handleScroll}>
-                <div ref={this.ref} className={"whiteboard"}
+            <div ref={this.whiteboardContainerRef} className={"whiteboard-container"}
+                 onScroll={this.scrollReducer.handleScroll}>
+                <div style={{position: "absolute"}}>{`${Math.round(this.state.scale * 100)}%`}</div>
+                <div ref={this.whiteboardRef} className={"whiteboard"}
                      onMouseUp={this.handleMouseUp}
                      onMouseMove={this.handleMouseMove}
                      onMouseLeave={this.handleMouseLeave}
                      style={styles}>
                     {React.Children.map(this.props.children, (child) => (
                         <WhiteboardElement x={100} y={100} width={100} height={50} minWidth={100} minHeight={50}
+                                           scale={this.state.scale}
                                            color={"red"}
                                            onDragStart={this.handleDragStart}
                                            onResizeStart={this.handleResizeStart}>
