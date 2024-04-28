@@ -111,15 +111,22 @@ class Whiteboard extends React.Component<WhiteboardProps, WhiteboardState> {
                      onMouseMove={this.handleMouseMove}
                      onMouseLeave={this.handleMouseLeave}
                      style={styles}>
-                    {React.Children.map(this.props.children, (child) => (
-                        <WhiteboardElement x={100} y={100} width={100} height={50} minWidth={100} minHeight={50}
-                                           scale={this.state.scale}
-                                           color={"red"}
-                                           onDragStart={this.handleDragStart}
-                                           onResizeStart={this.handleResizeStart}>
-                            {child}
-                        </WhiteboardElement>
-                    ))}
+                    {React.Children.map(this.props.children, (child) => {
+                            const ch = (child as React.ReactElement).props.children;
+                            return (
+                                <WhiteboardElement x={100} y={100}
+                                                   width={Math.max(300, ch.props.minWidth)}
+                                                   height={Math.max(150, ch.props.minHeight)}
+                                                   minWidth={ch.props.minWidth}
+                                                   minHeight={ch.props.minHeight}
+                                                   scale={this.state.scale}
+                                                   color={"red"}
+                                                   onDragStart={this.handleDragStart}
+                                                   onResizeStart={this.handleResizeStart}>
+                                    {child}
+                                </WhiteboardElement>)
+                        }
+                    )}
                 </div>
             </div>
         );

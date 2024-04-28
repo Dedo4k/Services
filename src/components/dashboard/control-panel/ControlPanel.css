@@ -5,8 +5,17 @@
     width: calc(100% - 15rem - 50%);
     background-color: var(--main-color);
     height: 2.5rem;
-    border-radius: .8rem;
+    border-radius: .25rem;
     z-index: 100;
     display: flex;
     align-items: center;
+    padding-inline: 1rem;
+}
+
+.control-panel .control-panel-btn {
+    background-color: var(--pale-color);
+}
+
+.control-panel .control-panel-btn:hover {
+    background-color: var(--onyx-color);
 }

@@ -1,6 +1,6 @@
 import React, {Fragment} from "react";
 import DashboardElement from "./dashboard-elements/dashboard-element/DashboardElement";
-import {Whiteboard} from "../index";
+import {Button, Whiteboard} from "../index";
 import DashboardClock from "./dashboard-elements/dashboard-clock-element/DashboardClock";
 import ControlPanel from "./control-panel/ControlPanel";
 
@@ -35,7 +35,8 @@ class Dashboard extends React.Component<any, DashboardState> {
         return (
             <div className={"dashboard"}>
                 <ControlPanel>
-                    <button onClick={() => this.addService(new DashboardClock(this))}>Add</button>
+                    <Button className={"control-panel-btn"} size={"small"} variant={"contained"}
+                            onClick={() => this.addService(new DashboardClock(this))}>Add</Button>
                 </ControlPanel>
                 <Whiteboard width={10000} height={10000}>
                     {this.state.services.map((service) =>

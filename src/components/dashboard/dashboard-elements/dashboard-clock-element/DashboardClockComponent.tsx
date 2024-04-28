@@ -5,11 +5,52 @@ export type DashboardClockProps = DashboardElementProps & {};
 
 class DashboardClockComponent extends DashboardElementComponent<DashboardClockProps, any> {
 
-    render(): React.ReactNode {
+    renderChildren(): React.ReactNode {
         return (
             <div className={"dashboard-clock"}>
-                {super.render()}
-                <div>Clock</div>
+                <div>ClockClockClockClockClockClockClockClockClockClockClockClockClockClockClockClockClockClockClockClockClockClockClock</div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
+                <div>
+                    <button>ADd</button>
+                </div>
             </div>
         );
     }

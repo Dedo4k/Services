@@ -5,7 +5,11 @@ import DashboardClockComponent, {DashboardClockProps} from "./DashboardClockComp
 class DashboardClock extends DashboardElement {
 
     buildComponent(): React.ReactNode {
-        return React.createElement(DashboardClockComponent, {onDelete: this.delete} as DashboardClockProps);
+        return React.createElement(DashboardClockComponent, {
+            minWidth: this.minWidth,
+            minHeight: this.minHeight,
+            onDelete: this.delete
+        } as DashboardClockProps);
     }
 }
 

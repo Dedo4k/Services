@@ -7,10 +7,14 @@ class DashboardElement {
 
     id: string;
     dashboard: Dashboard;
+    minWidth: number;
+    minHeight: number;
 
     constructor(dashboard: Dashboard) {
         this.dashboard = dashboard;
         this.id = v4();
+        this.minWidth = 300;
+        this.minHeight = 150;
     }
 
     delete = () => {
@@ -18,7 +22,12 @@ class DashboardElement {
     }
 
     buildComponent(): React.ReactNode {
-        return React.createElement(DashboardElementComponent, {onDelete: this.delete} as DashboardElementProps);
+        return React.createElement(DashboardElementComponent, {
+            id: this.id,
+            minWidth: this.minWidth,
+            minHeight: this.minHeight,
+            onDelete: this.delete
+        } as DashboardElementProps);
     }
 }
 

@@ -60,7 +60,7 @@ class WhiteboardElement extends React.Component<WhiteboardElementProps, Whiteboa
         }
 
         return (
-            <div className={"square"} style={styles} onMouseDown={this.onMouseDown}>
+            <div className={"whiteboard-element"} style={styles} onMouseDown={this.onMouseDown}>
                 <Resizer direction={"top"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"top-right"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"right"} onMouseDown={this.handleResize}/>
@@ -69,7 +69,14 @@ class WhiteboardElement extends React.Component<WhiteboardElementProps, Whiteboa
                 <Resizer direction={"bottom-left"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"left"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"top-left"} onMouseDown={this.handleResize}/>
-                {this.props.children}
+                <div className="whiteboard-element-content">
+                    {
+                        React.Children.map(this.props.children, (child: any) => {
+                            const element = child.props.children;
+                            return React.cloneElement(element, {...element.props, ...this.state})
+                        })
+                    }
+                </div>
             </div>
         );
     }
