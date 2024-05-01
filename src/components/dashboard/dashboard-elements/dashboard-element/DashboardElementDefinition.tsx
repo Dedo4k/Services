@@ -1,8 +1,8 @@
 import DashboardElementPropDefinition from "./DashboardElementPropDefinition";
-import DashboardElement from "../DashboardElement";
+import DashboardElement from "./DashboardElement";
 
 class DashboardElementDefinition {
-    type: { new(): DashboardElement };
+    type: { new(props?: any): DashboardElement };
     title: string;
     description: string;
     props: DashboardElementPropDefinition[];

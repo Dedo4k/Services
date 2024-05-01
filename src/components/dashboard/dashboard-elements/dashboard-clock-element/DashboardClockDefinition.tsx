@@ -1,6 +1,6 @@
-import DashboardElementDefinition from "../dashboard-element/definitions/DashboardElementDefinition";
+import DashboardElementDefinition from "../dashboard-element/DashboardElementDefinition";
 import DashboardClock from "./DashboardClock";
-import AutocompletePropDefinition from "../dashboard-element/definitions/prop-definitions/AutocompletePropDefinition";
+import AutocompletePropDefinition from "../dashboard-element/prop-definitions/AutocompletePropDefinition";
 import {getTimeZones} from "../../../../utils";
 
 class DashboardClockDefinition extends DashboardElementDefinition {

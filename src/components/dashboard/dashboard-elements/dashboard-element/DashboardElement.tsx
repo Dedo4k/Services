@@ -10,7 +10,7 @@ class DashboardElement {
     minWidth: number;
     minHeight: number;
 
-    constructor() {
+    constructor(props?: DashboardElementProps) {
         this.id = v4();
         this.minWidth = 300;
         this.minHeight = 150;

@@ -6,8 +6,9 @@ class DashboardClock extends DashboardElement {
 
     _timeZone?: string;
 
-    constructor() {
-        super();
+    constructor(props?: DashboardClockProps) {
+        super(props);
+        this._timeZone = props?.timeZone;
     }
 
     timeZone = (timeZone: string) => {

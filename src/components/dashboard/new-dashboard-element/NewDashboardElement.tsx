@@ -15,7 +15,8 @@ import {
 import DashboardClockDefinition from "../dashboard-elements/dashboard-clock-element/DashboardClockDefinition";
 
 import "./NewDashboardElement.css";
-import DashboardElementDefinition from "../dashboard-elements/dashboard-element/definitions/DashboardElementDefinition";
+import DashboardElementDefinition from "../dashboard-elements/dashboard-element/DashboardElementDefinition";
+import {DashboardElementProps} from "../dashboard-elements/dashboard-element/DashboardElementComponent";
 
 type NewDashboardElementProps = {
     onServiceAdd: (service: DashboardElement) => void;
@@ -26,6 +27,7 @@ type NewDashboardElementState = {
     serviceConfigureDialog: boolean;
     selectedDefinition?: DashboardElementDefinition;
     serviceConfiguration?: DashboardElement;
+    tempConfiguration?: {};
 }
 
 const availableServices = [
@@ -74,8 +76,8 @@ class NewDashboardElement extends React.Component<NewDashboardElementProps, NewD
     }
 
     handleCreateService = () => {
-        if (this.state.serviceConfiguration && this.state.serviceConfiguration.isValid()) {
-            this.props.onServiceAdd(this.state.serviceConfiguration);
+        if (this.state.selectedDefinition) {
+            this.props.onServiceAdd(new this.state.selectedDefinition.type(this.state.tempConfiguration as DashboardElementProps));
             this.toggleServiceConfigureDialog();
         }
     }
@@ -120,10 +122,14 @@ class NewDashboardElement extends React.Component<NewDashboardElementProps, NewD
                     <DialogContent className={"new-dashboard-element-dialog-content"}>
                         {
                             this.state.selectedDefinition?.props.map((prop, index) => {
-                                //@ts-ignore
-                                const handler: any = this.state.serviceConfiguration[prop.name];
+                                const handle = (value: any) => this.setState((prev) => ({
+                                    ...prev,
+                                    tempConfiguration: {
+                                        [prop.name]: value
+                                    }
+                                }))
                                 return (
-                                    <prop.type key={index} {...prop.props(handler)}></prop.type>
+                                    <prop.type key={index} {...prop.props(handle)}></prop.type>
                                 );
                             })
                         }

@@ -1,7 +1,7 @@
 import React from "react";
 import {IconButton as MIconButton, IconButtonOwnProps} from "@mui/material";
 
-type IconButtonProps = IconButtonOwnProps & {};
+type IconButtonProps = IconButtonOwnProps & React.HTMLAttributes<HTMLButtonElement> & {};
 
 class IconButton extends React.Component<IconButtonProps, any> {
 

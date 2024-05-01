@@ -1,11 +1,14 @@
 import React from "react";
-import DashboardElementComponent, {DashboardElementProps} from "../dashboard-element/DashboardElementComponent";
+import DashboardElementComponent, {
+    DashboardElementProps,
+    DashboardElementState
+} from "../dashboard-element/DashboardElementComponent";
 
 export type DashboardClockProps = DashboardElementProps & {
     timeZone: string
 };
 
-type DashboardClockState = DashboardClockProps & {
+type DashboardClockState = DashboardClockProps & DashboardElementState & {
     date: Date
 }
 
@@ -17,6 +20,7 @@ class DashboardClockComponent extends DashboardElementComponent<DashboardClockPr
         super(props);
         this.state = {
             ...this.props,
+            fullscreen: false,
             date: new Date()
         };
     }
