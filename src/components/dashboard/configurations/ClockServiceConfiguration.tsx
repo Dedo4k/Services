@@ -1,7 +1,7 @@
 import ServiceConfiguration from "./ServiceConfiguration";
 import StringProperty from "./properties/StringProperty";
 import React from "react";
-import {Autocomplete, TextField} from "@mui/material";
+import {Autocomplete, FormControl, FormHelperText, TextField} from "@mui/material";
 import {getTimeZones} from "../../../utils";
 
 class ClockServiceConfiguration extends ServiceConfiguration {
@@ -12,10 +12,14 @@ class ClockServiceConfiguration extends ServiceConfiguration {
         return (
             <>
                 {super.renderProperties(accessor)}
-                <div className={"service-configuration-properties"}>
-                    <Autocomplete renderInput={params => <TextField {...params} label={this.timeZone.name}/>}
-                                  options={getTimeZones().map((timezone) => ({label: timezone}))}
-                                  onChange={(event, value) => accessor(this.timeZone.name, value?.label)}/>
+                <div className={"service-configuration-properties-row"}>
+                    <FormControl fullWidth className="service-configuration-property">
+                        <Autocomplete size={"small"}
+                                      renderInput={params => <TextField {...params} label={this.timeZone.name}/>}
+                                      options={getTimeZones().map((timezone) => ({label: timezone}))}
+                                      onChange={(event, value) => accessor(this.timeZone.name, value?.label)}/>
+                        <FormHelperText>{this.timeZone.description}</FormHelperText>
+                    </FormControl>
                 </div>
             </>
         );

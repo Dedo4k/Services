@@ -1,5 +1,22 @@
-.service-configuration-properties-row {
+.service-configuration-properties {
 
+}
+
+.service-configuration-properties .service-configuration-properties-row {
+    padding-block: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex: 1;
+    gap: 1rem;
+}
+
+.service-configuration-properties .service-configuration-properties-row .service-configuration-property {
+    width: 100%;
+}
+
+.service-configuration-properties .service-configuration-properties-row .service-configuration-property:last-child {
+    margin-right: 0;
 }
 
 .ant-color-picker {
