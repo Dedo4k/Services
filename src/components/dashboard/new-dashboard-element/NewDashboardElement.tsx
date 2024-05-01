@@ -1,7 +1,6 @@
 import React from "react";
-import DashboardElement from "../dashboard-elements/dashboard-element/DashboardElement";
-import {Button} from "../../index";
 import {
+    Button,
     Card,
     CardActions,
     CardContent,
@@ -12,28 +11,25 @@ import {
     DialogTitle,
     Typography
 } from "@mui/material";
-import DashboardClockDefinition from "../dashboard-elements/dashboard-clock-element/DashboardClockDefinition";
 
 import "./NewDashboardElement.css";
-import DashboardElementDefinition from "../dashboard-elements/dashboard-element/DashboardElementDefinition";
-import {DashboardElementProps} from "../dashboard-elements/dashboard-element/DashboardElementComponent";
+import DashboardServiceConfiguration from "../service-configuration/DashboardServiceConfiguration";
+import ClockServiceDefinition from "../definitions/ClockServiceDefinition";
+import ServiceDefinition from "../definitions/ServiceDefinition";
+import DashboardService from "../services/DashboardService";
 
 type NewDashboardElementProps = {
-    onServiceAdd: (service: DashboardElement) => void;
+    onServiceAdd: (service: DashboardService) => void;
 }
 
 type NewDashboardElementState = {
     newServiceDialog: boolean;
     serviceConfigureDialog: boolean;
-    selectedDefinition?: DashboardElementDefinition;
-    serviceConfiguration?: DashboardElement;
-    tempConfiguration?: {};
+    selectedDefinition?: ServiceDefinition;
 }
 
-const availableServices = [
-    new DashboardClockDefinition(
-        "Clock service",
-        "This service displays current time of specified time zone")
+const availableServices: ServiceDefinition[] = [
+    new ClockServiceDefinition()
 ]
 
 class NewDashboardElement extends React.Component<NewDashboardElementProps, NewDashboardElementState> {
@@ -61,24 +57,20 @@ class NewDashboardElement extends React.Component<NewDashboardElementProps, NewD
     }
 
     backToNewServiceDialog = () => {
-        this.toggleServiceConfigureDialog();
-        this.toggleNewServiceDialog();
     }
 
-    handleConfigure = (serviceDefinition: DashboardElementDefinition) => {
+    handleConfigure = (serviceDefinition: ServiceDefinition) => {
         this.setState((prev) => ({
             ...prev,
-            selectedDefinition: serviceDefinition,
-            serviceConfiguration: new serviceDefinition.type()
+            selectedDefinition: serviceDefinition
         }));
-        this.toggleNewServiceDialog();
         this.toggleServiceConfigureDialog();
     }
 
-    handleCreateService = () => {
+    handleCreateService = (configuration: {}) => {
         if (this.state.selectedDefinition) {
-            this.props.onServiceAdd(new this.state.selectedDefinition.type(this.state.tempConfiguration as DashboardElementProps));
-            this.toggleServiceConfigureDialog();
+            this.props.onServiceAdd(new this.state.selectedDefinition.type(configuration));
+            this.toggleNewServiceDialog();
         }
     }
 
@@ -97,7 +89,7 @@ class NewDashboardElement extends React.Component<NewDashboardElementProps, NewD
                             availableServices.map((availableService, index) => {
                                 return (
                                     <Card key={index} className={"new-dashboard-element-option"}>
-                                        <CardHeader title={availableService.title}
+                                        <CardHeader title={availableService.name}
                                                     className={"new-dashboard-element-option-header"}/>
                                         <CardContent>
                                             <Typography>
@@ -116,33 +108,15 @@ class NewDashboardElement extends React.Component<NewDashboardElementProps, NewD
                     </DialogContent>
                     <DialogActions></DialogActions>
                 </Dialog>
-                <Dialog maxWidth={"md"} fullWidth open={this.state.serviceConfigureDialog}
-                        onClose={this.toggleServiceConfigureDialog}>
-                    <DialogTitle className={"new-dashboard-element-dialog-title"}>Service Configuration</DialogTitle>
-                    <DialogContent className={"new-dashboard-element-dialog-content"}>
-                        {
-                            this.state.selectedDefinition?.props.map((prop, index) => {
-                                const handle = (value: any) => this.setState((prev) => ({
-                                    ...prev,
-                                    tempConfiguration: {
-                                        [prop.name]: value
-                                    }
-                                }))
-                                return (
-                                    <prop.type key={index} {...prop.props(handle)}></prop.type>
-                                );
-                            })
-                        }
-                    </DialogContent>
-                    <DialogActions>
-                        <Button size={"small"} variant={"outlined"}
-                                className={"new-dashboard-element-dialog-btn"}
-                                onClick={this.backToNewServiceDialog}>Back to service selection</Button>
-                        <Button size={"small"} variant={"contained"}
-                                className={"new-dashboard-element-dialog-btn"}
-                                onClick={this.handleCreateService}>Create service</Button>
-                    </DialogActions>
-                </Dialog>
+                <DashboardServiceConfiguration open={this.state.serviceConfigureDialog}
+                                               configuration={this.state.selectedDefinition?.configuration}
+                                               onApply={this.handleCreateService}
+                                               onClose={this.toggleServiceConfigureDialog}
+                                               prevStep={{
+                                                   title: "Back to service selection",
+                                                   onPrevStep: this.backToNewServiceDialog
+                                               }}/>
+
             </div>
         );
     }

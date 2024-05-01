@@ -41,7 +41,7 @@ class ResizeReducer {
             case "right": {
                 this.resizingTarget?.setState((prev) => ({
                     ...prev,
-                    width: x - prev.x
+                    width: x - prev.x >= minWidth ? x - prev.x : prev.width
                 }), () => {
                     this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                 });
@@ -50,7 +50,7 @@ class ResizeReducer {
             case "bottom": {
                 this.resizingTarget?.setState((prev) => ({
                     ...prev,
-                    height: y - prev.y
+                    height: y - prev.y >= minHeight ? y - prev.y : prev.height
                 }), () => {
                     this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                 });
@@ -70,7 +70,7 @@ class ResizeReducer {
                 this.resizingTarget?.setState((prev) => ({
                     ...prev,
                     y: prev.y - y + prev.height >= minHeight ? y : prev.y,
-                    width: x - prev.x,
+                    width: x - prev.x >= minWidth ? x - prev.x : prev.width,
                     height: prev.y - y + prev.height >= minHeight ? prev.y - y + prev.height : prev.height
                 }), () => {
                     this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
@@ -80,8 +80,8 @@ class ResizeReducer {
             case "bottom-right": {
                 this.resizingTarget?.setState((prev) => ({
                     ...prev,
-                    width: x - prev.x,
-                    height: y - prev.y
+                    width: x - prev.x >= minWidth ? x - prev.x : prev.width,
+                    height: y - prev.y >= minHeight ? y - prev.y : prev.height
                 }), () => {
                     this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                 });
@@ -92,7 +92,7 @@ class ResizeReducer {
                     ...prev,
                     x: x > 0 ? prev.x - x + prev.width >= minWidth ? x : prev.x : 0,
                     width: prev.x - x + prev.width >= minWidth ? prev.x - x + prev.width : prev.width,
-                    height: y - prev.y
+                    height: y - prev.y >= minHeight ? y - prev.y : prev.height
                 }), () => {
                     this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                 });

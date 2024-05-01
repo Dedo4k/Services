@@ -1,11 +1,11 @@
 import React, {Fragment} from "react";
-import DashboardElement from "./dashboard-elements/dashboard-element/DashboardElement";
 import {Whiteboard} from "../index";
 import ControlPanel from "./control-panel/ControlPanel";
 import NewDashboardElement from "./new-dashboard-element/NewDashboardElement";
+import DashboardService from "./services/DashboardService";
 
 type DashboardState = {
-    services: DashboardElement[]
+    services: DashboardService[]
 }
 
 class Dashboard extends React.Component<any, DashboardState> {
@@ -17,7 +17,7 @@ class Dashboard extends React.Component<any, DashboardState> {
         }
     }
 
-    addService = (service: DashboardElement) => {
+    addService = (service: DashboardService) => {
         service.dashboard = this;
         this.setState((prev) => ({
             ...prev,
@@ -25,7 +25,7 @@ class Dashboard extends React.Component<any, DashboardState> {
         }));
     }
 
-    removeService = (service: DashboardElement) => {
+    removeService = (service: DashboardService) => {
         this.setState((prev) => ({
             ...prev,
             services: prev.services.filter((ell) => ell !== service)

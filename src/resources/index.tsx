@@ -1,3 +1,3 @@
-import SERVICES_LOGO from "./service-line.svg";
+import {ReactComponent as SERVICES_LOGO} from "./service-line.svg";
 
 export {SERVICES_LOGO};

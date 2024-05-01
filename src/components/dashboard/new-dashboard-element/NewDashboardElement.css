@@ -31,7 +31,3 @@
     border-color: var(--onyx-color);
     color: var(--paper-color);
 }
-
-.new-dashboard-element-dialog-content.MuiDialogContent-root {
-    padding: 1rem !important;
-}
