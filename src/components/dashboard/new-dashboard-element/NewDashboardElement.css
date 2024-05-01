@@ -1,0 +1,33 @@
+.new-dashboard-element-dialog-title,
+.new-dashboard-element-option-header {
+    background-color: var(--onyx-color);
+    color: var(--paper-color);
+}
+
+.new-dashboard-element-option {
+    margin-block: 1rem;
+}
+
+.new-dashboard-element-option:last-child {
+    margin-bottom: 0;
+}
+
+.new-dashboard-element-dialog-btn.MuiButton-contained {
+    background-color: var(--onyx-color);
+}
+
+.new-dashboard-element-dialog-btn:hover.MuiButton-contained {
+    background-color: var(--onyx-color);
+    opacity: .85;
+}
+
+.new-dashboard-element-dialog-btn.MuiButton-outlined {
+    border-color: var(--onyx-color);
+    color: var(--onyx-color);
+}
+
+.new-dashboard-element-dialog-btn:hover.MuiButton-outlined {
+    background-color: var(--onyx-color);
+    border-color: var(--onyx-color);
+    color: var(--paper-color);
+}

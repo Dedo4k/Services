@@ -1,0 +1,47 @@
+.service-component {
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--onyx-color);
+}
+
+.service-component .service-controls-component {
+    height: 2rem;
+    background-color: var(--onyx-color);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-inline: .5rem;
+}
+
+.service-component .service-controls-component .icon-btn.MuiIconButton-root {
+    color: var(--paper-color);
+}
+
+.service-component .service-component-content {
+    overflow: auto;
+    height: 100%;
+}
+
+.service-component .service-component-content::-webkit-scrollbar {
+    overflow: auto;
+    width: .2rem;
+    height: .2rem;
+}
+
+.service-component .service-component-content::-webkit-scrollbar-corner {
+    background-color: var(--onyx-color);
+}
+
+.service-component .service-component-content::-webkit-scrollbar-thumb {
+    background-color: var(--onyx-color);
+    border-radius: 1rem;
+}
+
+.fullscreen-service {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}

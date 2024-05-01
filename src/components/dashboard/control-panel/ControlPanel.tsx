@@ -2,15 +2,16 @@ import React from "react";
 
 import "./ControlPanel.css";
 
-class ControlPanel extends React.Component<any, any> {
+type ControlPanelProps = {
+    children?: React.ReactNode
+}
+
+class ControlPanel extends React.Component<ControlPanelProps, any> {
 
     render() {
         return (
             <div className={"control-panel"}>
-                <button>Add</button>
-                <button>Delete</button>
-                <button>Find</button>
-                <button>Edit</button>
+                {this.props.children}
             </div>
         );
     }

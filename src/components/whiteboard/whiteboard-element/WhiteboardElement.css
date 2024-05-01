@@ -1,0 +1,7 @@
+.whiteboard-element {
+    position: absolute;
+}
+
+.whiteboard-element-content {
+    height: 100%;
+}

@@ -1,5 +1,5 @@
 import Whiteboard from "../Whiteboard";
-import WhiteboardElement from "../square/WhiteboardElement";
+import WhiteboardElement from "../whiteboard-element/WhiteboardElement";
 import React from "react";
 
 class DragReducer {
@@ -18,13 +18,13 @@ class DragReducer {
     handleDrag = (event: React.MouseEvent) => {
         const {clientX, clientY} = event;
 
-        const offsetX = clientX - this.dragPrevX!;
-        const offsetY = clientY - this.dragPrevY!;
+        const offsetX = (clientX - this.dragPrevX!) / this.whiteboard.state.scale;
+        const offsetY = (clientY - this.dragPrevY!) / this.whiteboard.state.scale;
         this.dragTo(offsetX, offsetY, () => {
             this.dragPrevX = clientX;
             this.dragPrevY = clientY;
 
-            const {offsetTop, offsetLeft} = this.whiteboard.ref.current!;
+            const {offsetTop, offsetLeft} = this.whiteboard.whiteboardRef.current!;
 
             const pointerY = clientY - offsetTop!;
             const pointerX = clientX - offsetLeft!;

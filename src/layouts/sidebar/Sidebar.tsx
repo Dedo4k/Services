@@ -13,7 +13,7 @@ class Sidebar extends React.Component<any, any> {
                     isPending ? "pending" : isActive ? "active" : ""
                 }>
                     <div className={"logo"}>
-                        <img src={SERVICES_LOGO} alt="sidebar-logo"/>
+                        <SERVICES_LOGO/>
                         <h2>SERVICES</h2>
                     </div>
                 </NavLink>

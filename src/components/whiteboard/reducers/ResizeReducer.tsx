@@ -1,5 +1,5 @@
 import Whiteboard from "../Whiteboard";
-import WhiteboardElement from "../square/WhiteboardElement";
+import WhiteboardElement from "../whiteboard-element/WhiteboardElement";
 import React from "react";
 import {ResizeDirection} from "../resizer/Resizer";
 
@@ -19,11 +19,13 @@ class ResizeReducer {
 
     handleResize = (event: React.MouseEvent) => {
         const {clientX, clientY} = event;
-
-        const y = clientY - this.whiteboard.ref.current?.offsetTop! + this.whiteboard.ref.current?.parentElement?.scrollTop!;
-        const x = clientX - this.whiteboard.ref.current?.offsetLeft! + this.whiteboard.ref.current?.parentElement?.scrollLeft!;
-
+        const {scale} = this.whiteboard.state;
         const {minHeight, minWidth} = this.resizingTarget?.state!;
+        const {offsetTop, offsetLeft} = this.whiteboard.whiteboardRef.current!;
+        const {scrollTop, scrollLeft} = this.whiteboard.whiteboardContainerRef.current!;
+
+        const y = (clientY - offsetTop + scrollTop) / scale;
+        const x = (clientX - offsetLeft + scrollLeft) / scale;
 
         switch (this.resizeDirection) {
             case "top": {
@@ -39,7 +41,7 @@ class ResizeReducer {
             case "right": {
                 this.resizingTarget?.setState((prev) => ({
                     ...prev,
-                    width: x - prev.x
+                    width: x - prev.x >= minWidth ? x - prev.x : prev.width
                 }), () => {
                     this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                 });
@@ -48,7 +50,7 @@ class ResizeReducer {
             case "bottom": {
                 this.resizingTarget?.setState((prev) => ({
                     ...prev,
-                    height: y - prev.y
+                    height: y - prev.y >= minHeight ? y - prev.y : prev.height
                 }), () => {
                     this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                 });
@@ -68,7 +70,7 @@ class ResizeReducer {
                 this.resizingTarget?.setState((prev) => ({
                     ...prev,
                     y: prev.y - y + prev.height >= minHeight ? y : prev.y,
-                    width: x - prev.x,
+                    width: x - prev.x >= minWidth ? x - prev.x : prev.width,
                     height: prev.y - y + prev.height >= minHeight ? prev.y - y + prev.height : prev.height
                 }), () => {
                     this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
@@ -78,8 +80,8 @@ class ResizeReducer {
             case "bottom-right": {
                 this.resizingTarget?.setState((prev) => ({
                     ...prev,
-                    width: x - prev.x,
-                    height: y - prev.y
+                    width: x - prev.x >= minWidth ? x - prev.x : prev.width,
+                    height: y - prev.y >= minHeight ? y - prev.y : prev.height
                 }), () => {
                     this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                 });
@@ -90,7 +92,7 @@ class ResizeReducer {
                     ...prev,
                     x: x > 0 ? prev.x - x + prev.width >= minWidth ? x : prev.x : 0,
                     width: prev.x - x + prev.width >= minWidth ? prev.x - x + prev.width : prev.width,
-                    height: y - prev.y
+                    height: y - prev.y >= minHeight ? y - prev.y : prev.height
                 }), () => {
                     this.whiteboard.scrollReducer.scrollToEdge(clientX, clientY);
                 });

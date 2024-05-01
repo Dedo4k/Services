@@ -1,0 +1,28 @@
+.dashboard-service-configuration-dialog-title {
+    background-color: var(--onyx-color);
+    color: var(--paper-color);
+}
+
+.dashboard-service-configuration-dialog-btn.MuiButton-contained {
+    background-color: var(--onyx-color);
+}
+
+.dashboard-service-configuration-dialog-btn:hover.MuiButton-contained {
+    background-color: var(--onyx-color);
+    opacity: .85;
+}
+
+.dashboard-service-configuration-dialog-btn.MuiButton-outlined {
+    border-color: var(--onyx-color);
+    color: var(--onyx-color);
+}
+
+.dashboard-service-configuration-dialog-btn:hover.MuiButton-outlined {
+    background-color: var(--onyx-color);
+    border-color: var(--onyx-color);
+    color: var(--paper-color);
+}
+
+.dashboard-service-configuration-dialog-content.MuiDialogContent-root {
+    padding: 1rem !important;
+}

@@ -10,15 +10,14 @@ type WhiteboardElementProps = {
     height: number,
     minWidth: number,
     minHeight: number,
-    color: string,
+    scale: number,
     children?: React.ReactNode,
     onDragStart: (event: React.MouseEvent, target: WhiteboardElement) => void,
     onResizeStart: (event: React.MouseEvent<HTMLDivElement>, target: WhiteboardElement, resizeDirection: ResizeDirection) => void
 }
 
 type WhiteboardElementState = WhiteboardElementProps & {
-    dragging: boolean,
-    resizing: boolean
+    dragging: boolean
 }
 
 class WhiteboardElement extends React.Component<WhiteboardElementProps, WhiteboardElementState> {
@@ -27,8 +26,7 @@ class WhiteboardElement extends React.Component<WhiteboardElementProps, Whiteboa
         super(props);
         this.state = {
             ...props,
-            dragging: false,
-            resizing: false
+            dragging: false
         }
     }
 
@@ -49,18 +47,17 @@ class WhiteboardElement extends React.Component<WhiteboardElementProps, Whiteboa
 
     render() {
         const styles = {
-            width: `${this.state.width}px`,
-            height: `${this.state.height}px`,
+            width: `${this.state.width * this.props.scale}px`,
+            height: `${this.state.height * this.props.scale}px`,
             minWidth: `${this.state.minWidth}px`,
             minHeight: `${this.state.minHeight}px`,
-            top: `${this.state.y}px`,
-            left: `${this.state.x}px`,
-            backgroundColor: this.state.color,
+            top: `${this.state.y * this.props.scale}px`,
+            left: `${this.state.x * this.props.scale}px`,
             cursor: this.state.dragging ? "move" : "grab"
         }
 
         return (
-            <div className={"square"} style={styles} onMouseDown={this.onMouseDown}>
+            <div className={"whiteboard-element"} style={styles} onMouseDown={this.onMouseDown}>
                 <Resizer direction={"top"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"top-right"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"right"} onMouseDown={this.handleResize}/>
@@ -69,7 +66,18 @@ class WhiteboardElement extends React.Component<WhiteboardElementProps, Whiteboa
                 <Resizer direction={"bottom-left"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"left"} onMouseDown={this.handleResize}/>
                 <Resizer direction={"top-left"} onMouseDown={this.handleResize}/>
-                {this.props.children}
+                <div className="whiteboard-element-content">
+                    {
+                        React.Children.map(this.props.children, (child: any) => {
+                            const element = child.props.children;
+                            return React.cloneElement(element, {
+                                ...element.props,
+                                ...this.state,
+                                scale: this.props.scale
+                            })
+                        })
+                    }
+                </div>
             </div>
         );
     }
